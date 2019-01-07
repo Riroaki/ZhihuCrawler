@@ -32,5 +32,11 @@ class RandomUserAgentMiddlware(object):
         def get_ip():
             return choice(self.ip_list)
 
-        request.headers.setdefault('User-Agent', get_ua())
-        request.meta['proxy'] = get_ip()
+        # 更换user-agent
+        new_ua = get_ua()
+        if new_ua:
+            request.headers.setdefault('User-Agent', new_ua)
+        # 更换ip代理
+        new_ip = get_ip()
+        if new_ip:
+            request.meta['proxy'] = new_ip
