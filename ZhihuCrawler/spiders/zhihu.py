@@ -52,6 +52,20 @@ class ZhihuSpider(Spider):
     followers_query = "data%5B*%5D.answer_count%2Carticles_count%2Cgender%2Cfollower_count%2Cis_followed%2Cis_following\
     %2Cbadge%5B%3F(type%3Dbest_answerer)%5D.topics"
 
+    # 还没有用到的：
+    # 某问题下回答列表的查询url
+    question_url = 'https://www.zhihu.com/api/v4/questions/{question}/answers?include={include}'
+    # question is like '33946642'
+
+    # 问题下回答列表的查询参数
+    question_query = 'data%5B%2A%5D.is_normal%2Cadmin_closed_comment%2Creward_info%2Cis_collapsed%2C\
+    annotation_action%2Cannotation_detail%2Ccollapse_reason%2Cis_sticky%2Ccollapsed_by%2Csuggest_edit%2C\
+    comment_count%2Ccan_comment%2Ccontent%2Ceditable_content%2Cvoteup_count%2Creshipment_settings%2C\
+    comment_permission%2Ccreated_time%2Cupdated_time%2Creview_info%2Crelevant_info%2Cquestion%2Cexcerpt%2C\
+    relationship.is_authorized%2Cis_author%2Cvoting%2Cis_thanked%2Cis_nothelp%2Cis_labeled%3Bdata%5B%2A%5D\
+    .mark_infos%5B%2A%5D.url%3Bdata%5B%2A%5D.author.follower_count%2Cbadge%5B%2A%5D.topics&limit=5&offset=10\
+    &platform=desktop&sort_by=default'
+
     def start_requests(self):
         """
         重写start_requests方法，请求了用户查询、关注列表、粉丝列表
