@@ -53,7 +53,7 @@ class ZhihuSpider(Spider):
     %2Cbadge%5B%3F(type%3Dbest_answerer)%5D.topics"
 
     # 回答按赞数排名的查询url
-    answer_url = 'https://www.zhihu.com/api/v4/members/{user}/answers?include={include}'
+    answers_url = 'https://www.zhihu.com/api/v4/members/{user}/answers?include={include}'
 
     # 回答前20赞数的查询参数
     answer_query = 'data%5B*%5D.is_normal%2Cadmin_closed_comment%2Creward_info%2Cis_collapsed%2Cannotation_action%2C\
@@ -89,7 +89,7 @@ class ZhihuSpider(Spider):
         yield item
         # 获取用户回答，按照点赞数排序
         yield Request(
-            self.answer_query.format(user=result.get('url_token'), include=self.answer_query, offset=0, limit=20),
+            self.answers_url.format(user=result.get('url_token'), include=self.answer_query, offset=0, limit=20),
             callback=self.parse_answers
         )
         # 获取关注用户列表
@@ -118,7 +118,7 @@ class ZhihuSpider(Spider):
                 yield item
         if 'page' in results.keys() and not results.get('is_end'):
             next_page = results.get('paging').get('next')
-            yield Request(next_page, self.parse_answers)
+            yield Request(next_page, callback=self.parse_answers)
 
     def parse_follows(self, response):
         """

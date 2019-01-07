@@ -30,6 +30,8 @@ class RandomUserAgentMiddlware(object):
             return getattr(self.ua, self.ua_type)
 
         def get_ip():
+            if not self.ip_list:
+                return None
             return choice(self.ip_list)
 
         # 更换user-agent

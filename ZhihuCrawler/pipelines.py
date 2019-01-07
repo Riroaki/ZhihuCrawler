@@ -29,9 +29,10 @@ class MyPipeline(object):
         # 用户回答信息
         elif isinstance(item, AnswerItem):
             author_name = item['author'].get('name')
-            if not exists(author_name + sep):
-                mkdir(author_name)
-            file_name = sep.join([self.__download_path, author_name, item['question'].get('title') + '.txt'])
+            answer_folder = self.__download_path + author_name + '_answers/'
+            if not exists(answer_folder):
+                mkdir(answer_folder)
+            file_name = answer_folder + item['question'].get('title') + '.txt'
             if not exists(file_name):
                 with open(file_name, 'w') as f:
                     dump(dict(item), f,

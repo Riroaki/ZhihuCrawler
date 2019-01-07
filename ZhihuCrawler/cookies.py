@@ -3,7 +3,7 @@ from selenium import webdriver
 from pickle import dump, load
 from os.path import exists
 
-COOKIE_FILE = 'data/cookies.pkl'
+COOKIE_FILE = 'data/cookies/cookies.pkl'
 
 
 # Get cookies using selenium.
