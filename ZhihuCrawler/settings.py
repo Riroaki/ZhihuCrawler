@@ -20,7 +20,8 @@ DOWNLOAD_PATH = 'data/'
 
 # Override the default request headers:
 DEFAULT_REQUEST_HEADERS = {
-    'authorization': 'oauth c3cef7c66a1843f8b3a9e6a1e3160e20'
+    'authorization': 'oauth c3cef7c66a1843f8b3a9e6a1e3160e20',
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'
 }
 
 USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko)\
@@ -43,7 +44,7 @@ LOG_LEVEL = 'WARNING'
 
 RANDOM_UA_TYPE = 'random'
 
-ip_list = [
+IP_LIST = [
     "http://180.76.154.5:8888",
     "http://14.109.107.1:8998",
     "http://106.46.136.159:808",

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from json import loads
 from scrapy import Spider, Request
-from ZhihuCrawler.items import UserItem
+from ZhihuCrawler.items import UserItem, AnswerItem
 from ZhihuCrawler.cookies import load_cookies
 
 
@@ -52,23 +52,19 @@ class ZhihuSpider(Spider):
     followers_query = "data%5B*%5D.answer_count%2Carticles_count%2Cgender%2Cfollower_count%2Cis_followed%2Cis_following\
     %2Cbadge%5B%3F(type%3Dbest_answerer)%5D.topics"
 
-    # 还没有用到的：
-    # 某问题下回答列表的查询url
-    question_url = 'https://www.zhihu.com/api/v4/questions/{question}/answers?include={include}'
-    # question is like '33946642'
+    # 回答按赞数排名的查询url
+    answer_url = 'https://www.zhihu.com/api/v4/members/{user}/answers?include={include}'
 
-    # 问题下回答列表的查询参数
-    question_query = 'data%5B%2A%5D.is_normal%2Cadmin_closed_comment%2Creward_info%2Cis_collapsed%2C\
-    annotation_action%2Cannotation_detail%2Ccollapse_reason%2Cis_sticky%2Ccollapsed_by%2Csuggest_edit%2C\
-    comment_count%2Ccan_comment%2Ccontent%2Ceditable_content%2Cvoteup_count%2Creshipment_settings%2C\
-    comment_permission%2Ccreated_time%2Cupdated_time%2Creview_info%2Crelevant_info%2Cquestion%2Cexcerpt%2C\
-    relationship.is_authorized%2Cis_author%2Cvoting%2Cis_thanked%2Cis_nothelp%2Cis_labeled%3Bdata%5B%2A%5D\
-    .mark_infos%5B%2A%5D.url%3Bdata%5B%2A%5D.author.follower_count%2Cbadge%5B%2A%5D.topics&limit=5&offset=10\
-    &platform=desktop&sort_by=default'
+    # 回答前20赞数的查询参数
+    answer_query = 'data%5B*%5D.is_normal%2Cadmin_closed_comment%2Creward_info%2Cis_collapsed%2Cannotation_action%2C\
+    annotation_detail%2Ccollapse_reason%2Ccollapsed_by%2Csuggest_edit%2Ccomment_count%2Ccan_comment%2Ccontent%2C\
+    voteup_count%2Creshipment_settings%2Ccomment_permission%2Cmark_infos%2Ccreated_time%2Cupdated_time%2Creview_info%2C\
+    question%2Cexcerpt%2Cis_labeled%2Clabel_info%2Crelationship.is_authorized%2Cvoting%2Cis_author%2Cis_thanked%2C\
+    is_nothelp%3Bdata%5B*%5D.author.badge%5B%3F(type%3Dbest_answerer)%5D.topics&offset={offset}&limit={limit}&sort_by=voteups'
 
     def start_requests(self):
         """
-        重写start_requests方法，请求了用户查询、关注列表、粉丝列表
+        重写start_requests方法，请求了用户查询、关注列表、粉丝列表（前20人）
         :return: 请求
         """
         yield Request(self.user_url.format(user=self.start_user, include=self.user_query),
@@ -88,15 +84,41 @@ class ZhihuSpider(Spider):
         item = UserItem()
         # 用获取的字段为item定义的字段赋值
         for field in item.fields:
-            if field in result.keys():
-                item[field] = result.get(field)
+            item[field] = result.get(field, 'Undefined')
+        # 返回用户信息
         yield item
+        # 获取用户回答，按照点赞数排序
         yield Request(
-            self.follows_url.format(user=result.get("url_token"), include=self.follows_query, offset=0, limit=20),
-            callback=self.parse_follows)
+            self.answer_query.format(user=result.get('url_token'), include=self.answer_query, offset=0, limit=20),
+            callback=self.parse_answers
+        )
+        # 获取关注用户列表
         yield Request(
-            self.followers_url.format(user=result.get("url_token"), include=self.followers_query, offset=0, limit=20),
-            callback=self.parse_follows)
+            self.follows_url.format(user=result.get('url_token'), include=self.follows_query, offset=0, limit=20),
+            callback=self.parse_follows
+        )
+        # 获取粉丝列表
+        yield Request(
+            self.followers_url.format(user=result.get('url_token'), include=self.followers_query, offset=0, limit=20),
+            callback=self.parse_follows
+        )
+
+    def parse_answers(self, response):
+        """
+        用户回答列表的解析
+        :param response: 网页响应数据
+        :return: 网页请求
+        """
+        results = loads(response.text)
+        if 'data' in results.keys():
+            for result in results.get('data'):
+                item = AnswerItem()
+                for field in item.fields:
+                    item[field] = result.get(field, 'Undefined')
+                yield item
+        if 'page' in results.keys() and not results.get('is_end'):
+            next_page = results.get('paging').get('next')
+            yield Request(next_page, self.parse_answers)
 
     def parse_follows(self, response):
         """
@@ -105,12 +127,10 @@ class ZhihuSpider(Spider):
         :return: json格式包含data和page的数据
         """
         results = loads(response.text)
-
         if 'data' in results.keys():
             for result in results.get('data'):
-                yield Request(self.user_url.format(user=result.get("url_token"), include=self.user_query),
+                yield Request(self.user_url.format(user=result.get('url_token'), include=self.user_query),
                               callback=self.parse_user)
-
         if 'page' in results.keys() and not results.get('is_end'):
-            next_page = results.get('paging').get("next")
+            next_page = results.get('paging').get('next')
             yield Request(next_page, self.parse_follows)

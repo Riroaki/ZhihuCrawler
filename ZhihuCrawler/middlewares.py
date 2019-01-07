@@ -18,7 +18,7 @@ class RandomUserAgentMiddlware(object):
             print('无法获取随机用户代理')
         # 可读取在settings文件中的配置，来决定开源库ua执行的方法，默认是random，也可是ie、Firefox等等
         self.ua_type = crawler.settings.get("RANDOM_UA_TYPE", "random")
-        self.ip_list = crawler.settings.get("ip_list")
+        self.ip_list = crawler.settings.get("IP_LIST")
 
     @classmethod
     def from_crawler(cls, crawler):
@@ -33,4 +33,4 @@ class RandomUserAgentMiddlware(object):
             return choice(self.ip_list)
 
         request.headers.setdefault('User-Agent', get_ua())
-        request.meta['proxy'] = 'http://%s' % get_ip()
+        request.meta['proxy'] = get_ip()
