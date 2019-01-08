@@ -4,3 +4,4 @@ venv/*
 *.pyc
 *.pkl
 *.txt
+!requirements.txt
