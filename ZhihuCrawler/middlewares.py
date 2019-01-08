@@ -5,11 +5,8 @@ from random import choice
 
 class RandomUserAgentMiddlware(object):
     """
-    随机更换user-agent
-    模仿并替换site-package/scrapy/downloadermiddlewares源代码中的
-    useragent.py中的UserAgentMiddleware类
+    随机更换
     """
-
     def __init__(self, crawler):
         super(RandomUserAgentMiddlware, self).__init__()
         try:

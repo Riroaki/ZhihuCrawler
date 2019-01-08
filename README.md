@@ -22,10 +22,12 @@
 
 #### 环境：
 
-- Python3.6.5，具体依赖的库在项目文件夹下requirements.txt中
-- Chrome浏览器，版本 71.0.3578.98（正式版本） （64 位）
-- geckodriver最新版（v0.23.0）
-- chromedriver最新版（2.45）
+```python
+Python: 3.6.5，具体依赖的库在项目文件夹下requirements.txt中
+Chrome浏览器，版本 71.0.3578.98（正式版本） （64 位）
+geckodriver最新版（v0.23.0）
+chromedriver最新版（2.45）
+```
 
 #### 启动：
 
@@ -35,6 +37,8 @@
 ```python
 MONGO_URI = 'URI of your mongodb'	# 你的数据库URI
 DB_NAME = 'zhihu'					# 你的数据库名称
+USER_NAME = 'Your name'				# 你的用户名
+PASSWORD = 'xxx'					# 你的密码
 USE_DB = True						# 修改成True，数据将会存储到数据库而不是本地文档
 ```
 

@@ -63,4 +63,6 @@ IP_LIST = [
 # Store the data in mongo db.
 MONGO_URI = 'URI of your mongodb'
 DB_NAME = 'zhihu'
+USER_NAME = 'Your name'
+PASSWORD = 'xxx'
 USE_DB = False

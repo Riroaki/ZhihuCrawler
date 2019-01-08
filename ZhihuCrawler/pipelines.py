@@ -10,13 +10,17 @@ class MyPipeline(object):
     def __init__(self, download_path: str,
                  use_db: bool,
                  mongodb_uri: str,
-                 db_name: str):
+                 db_name: str,
+                 user: str,
+                 pwd: str):
         self.__download_path = download_path
         self.__use_db = use_db
         self.__db_uri = mongodb_uri
         self.__db_name = db_name
         self.__client = MongoClient(self.__db_uri)
         self.__db = self.__client[self.__db_name]
+        self.__user = user
+        self.__pwd = pwd
 
     @classmethod
     def from_crawler(cls, crawler):
@@ -24,7 +28,9 @@ class MyPipeline(object):
             download_path=crawler.settings.get('DOWNLOAD_PATH'),
             use_db=crawler.settings.get('USE_DB'),
             mongodb_uri=crawler.settings.get('MONGO_URI'),
-            db_name=crawler.settings.get('DB_NAME')
+            db_name=crawler.settings.get('DB_NAME'),
+            user=crawler.settings.get("USER_NAME"),
+            pwd=crawler.settings.get("PASSWORD"),
         )
 
     def close_spider(self, spider):
