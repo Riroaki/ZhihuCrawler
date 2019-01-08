@@ -20,44 +20,46 @@
 
 ## 使用
 
-- 环境：
-  - Python3.6.5，具体依赖的库在项目文件夹下requirements.txt中
-  - Chrome浏览器，版本 71.0.3578.98（正式版本） （64 位）
-  - geckodriver最新版（v0.23.0）
-  - chromedriver最新版（2.45）
-- 启动：
+#### 环境：
 
-  - 直接使用：进入第二层ZhihuCrawler目录，所有数据将会保存在项目内data文件夹下，其中个人信息和回答信息将会分开存放（详见下文中结果部分）
-  - 数据库：需要安装mongodb数据库。请在setting.py中修改以下内容以获得数据库支持：
+- Python3.6.5，具体依赖的库在项目文件夹下requirements.txt中
+- Chrome浏览器，版本 71.0.3578.98（正式版本） （64 位）
+- geckodriver最新版（v0.23.0）
+- chromedriver最新版（2.45）
 
-  ```python
-  MONGO_URI = 'URI of your mongodb'	# 你的数据库URI
-  DB_NAME = 'zhihu'					# 你的数据库名称
-  USE_DB = True						# 修改成True，数据将会存储到数据库而不是本地文档
-  ```
+#### 启动：
 
-  - 输入：`scrapy crawl zhihu`
+- 直接使用：进入第二层ZhihuCrawler目录，所有数据将会保存在项目内data文件夹下，其中个人信息和回答信息将会分开存放（详见下文中结果部分）
+- 数据库：需要安装mongodb数据库。请在setting.py中修改以下内容以获得数据库支持：
 
-- 过程：
+```python
+MONGO_URI = 'URI of your mongodb'	# 你的数据库URI
+DB_NAME = 'zhihu'					# 你的数据库名称
+USE_DB = True						# 修改成True，数据将会存储到数据库而不是本地文档
+```
 
-  - 如果运行正常，第一次运行的时候你将会看到一个弹出的Chrome页面，提示你扫码登录知乎获得Cookie。
-    - 如果出现错误，请确认你的系统有geckodriver——在项目的driver文件夹下有macOS版本的文件，其他系统可以在官网找到文件。
-  - 在控制台敲入回车，开始爬虫……
+- 输入：`scrapy crawl zhihu`
+
+### 过程：
+
+- 如果运行正常，第一次运行的时候你将会看到一个弹出的Chrome页面，提示你扫码登录知乎获得Cookie。
+  - 如果出现错误，请确认你的系统有geckodriver——在项目的driver文件夹下有macOS版本的文件，其他系统可以在官网找到文件。
+- 在控制台敲入回车，开始爬虫……
 
 ## 运行结果截图
 
-- 控制台运行截图
+#### 控制台运行截图
 
-  ![](screenshots/console.png)
+![](screenshots/console.png)
 
-- 文件夹截图
+#### 文件夹截图
 
-  ![](screenshots/files.png)
+![](screenshots/files.png)
 
-- 用户信息文件截图
+#### 用户信息文件截图
 
-  ![](screenshots/user.png)
+![](screenshots/user.png)
 
-- 用户回答截图
+### 用户回答截图
 
-  ![](screenshots/answer.png)
+![](screenshots/answer.png)
