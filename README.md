@@ -35,7 +35,7 @@ chromedriver最新版（2.45）
 - 数据库：需要安装mongodb数据库。请在setting.py中修改以下内容以获得数据库支持：
 
 ```python
-MONGO_URI = 'URI of your mongodb'	# 你的数据库URI
+MONGO_URI = 'URI of your mongodb'	# 你的数据库URI，形似格式：mongodb://localhost:27017/
 DB_NAME = 'zhihu'					# 你的数据库名称
 USER_NAME = 'Your name'				# 你的用户名
 PASSWORD = 'xxx'					# 你的密码
