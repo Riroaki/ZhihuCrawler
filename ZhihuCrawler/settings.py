@@ -59,3 +59,8 @@ IP_LIST = [
     # "http://101.81.120.58:8118",
     # "http://180.175.145.148:808"
 ]
+
+# Store the data in mongo db.
+MONGO_URI = 'URI of your mongodb'
+DB_NAME = 'zhihu'
+USE_DB = False
